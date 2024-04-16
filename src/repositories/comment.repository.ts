@@ -6,9 +6,9 @@ import { ListCommentDto, ListSubCommentDto } from "../modules/comment/dto/find-c
 @CustomRepository(Comment)
 export class CommentRepository extends TypeORMRepository<Comment> {
     async listComment(query: ListCommentDto) {
-        const { cursor, pageSize, articleId } = query;
+        const { cursor, pageSize, productId } = query;
         const queryBuilder = this.createQueryBuilder('comment')
-            .leftJoin("comment.article", "article")
+            .leftJoin("comment.products", "products")
             .leftJoin("comment.user", "user")
             .leftJoin("comment.likes", "likes")
             .loadRelationCountAndMap('comment.likeCount', 'comment.likes')
@@ -23,9 +23,8 @@ export class CommentRepository extends TypeORMRepository<Comment> {
                 'likes.avatar'
             ])
             .where('comment.parentId IS NULL')
-            .andWhere("article.deleted = false")
             .andWhere("comment.deleted = false")
-            .andWhere("article.id = :articleId", { articleId: articleId })
+            .andWhere("products.id = :productId", { productId: productId })
             .orderBy('comment.id', "DESC");
 
         if (cursor) {
@@ -71,7 +70,7 @@ export class CommentRepository extends TypeORMRepository<Comment> {
 
     async getCommentById(commentId: number) {
         return this.createQueryBuilder('comment')
-            .leftJoin("comment.article", "article")
+            .leftJoin("comment.products", "products")
             .leftJoin("comment.user", "user")
             .leftJoin("comment.likes", "likes")
             .loadRelationCountAndMap('comment.likeCount', 'comment.likes')
@@ -85,8 +84,6 @@ export class CommentRepository extends TypeORMRepository<Comment> {
                 'likes.username',
                 'likes.avatar'
             ])
-            .andWhere("article.deleted = false")
-            .andWhere("comment.deleted = false")
             .andWhere("comment.id = :commentId", { commentId: commentId })
             .getOne();
     }

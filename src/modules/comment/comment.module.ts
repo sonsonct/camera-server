@@ -6,9 +6,10 @@ import { UserRepository } from '../../repositories/user.repository';
 import { StatisticalRepository } from 'src/repositories/statistical.repository';
 import { CommentPublicController } from './public/public-comment.controller';
 import { CommentUserController } from './user/user-comment.controller';
+import { ProductsRepository } from 'src/repositories/products.repository';
 
 @Module({
-  imports: [TypeOrmExModule.forCustomRepository([CommentRepository, UserRepository, StatisticalRepository])],
+  imports: [TypeOrmExModule.forCustomRepository([CommentRepository, UserRepository, StatisticalRepository, ProductsRepository])],
   controllers: [CommentPublicController, CommentUserController],
   providers: [CommentService]
 })

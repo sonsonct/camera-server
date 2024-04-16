@@ -15,13 +15,13 @@ export class CommentPublicController {
         status: HttpStatus.OK,
     })
     @ApiOperation({ summary: 'List comment' })
-    @Get('/:articleId/')
+    @Get('/:productId/')
     @HttpCode(HttpStatus.OK)
     async listComment(
-        @Param('articleId') articleId: number,
+        @Param('productId') productId: number,
         @Query() listCommentDto: ListCommentDto,
     ) {
-        listCommentDto.articleId = articleId;
+        listCommentDto.productId = productId;
         return await this.commentService.getListComment(listCommentDto);
     }
 
