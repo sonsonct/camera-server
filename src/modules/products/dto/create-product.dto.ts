@@ -18,7 +18,6 @@ export class CreateProductDto {
     @IsNotEmpty({ message: 'common.REQUIRED_FIELD' })
     count: number;
 
-    @ApiProperty({ type: "string" })
     @IsOptional()
     image: string;
 }
