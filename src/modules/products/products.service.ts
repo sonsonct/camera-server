@@ -34,7 +34,7 @@ export class ProductsService {
     }
 
     async detailProduct(id: number) {
-        return await this.productsRepository.findOneBy({ id: id, deleted: true });
+        return await this.productsRepository.findOneBy({ id: id, deleted: false });
     }
 
     async listProduct(query: GetListProductDto) {
