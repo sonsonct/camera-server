@@ -41,4 +41,8 @@ export class CartService {
     async selectCart(userId: number) {
         return await this.cartRepository.getCart(userId);
     }
+
+    async deleteCart(id: number) {
+        return await this.orderRepository.delete({ id });
+    }
 }
