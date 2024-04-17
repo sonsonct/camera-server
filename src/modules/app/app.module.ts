@@ -23,6 +23,7 @@ import { ProductsModule } from '../products/products.module';
 import { CloudinaryModule } from '../cloudinary/cloudinary.module';
 
 
+
 @Module({
   imports: [
     TypeOrmExModule.forCustomRepository([IpBlockRepository]),
@@ -44,7 +45,7 @@ import { CloudinaryModule } from '../cloudinary/cloudinary.module';
     StatisticalModule,
     AccountModule,
     OtpModule,
-    CloudinaryModule
+    CloudinaryModule,
   ],
   controllers: [AppController],
   providers: [

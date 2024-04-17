@@ -8,7 +8,7 @@ class AppConfig {
   }
 
   get serviceName(): string {
-    return process.env.SERVICE_NAME || 'blog';
+    return process.env.SERVICE_NAME || 'camera';
   }
 
   get nodeEnv(): string {
