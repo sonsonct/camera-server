@@ -21,6 +21,7 @@ import { OtpModule } from '../otp/otp.module';
 import { AccountModule } from '../account/account.module';
 import { ProductsModule } from '../products/products.module';
 import { CloudinaryModule } from '../cloudinary/cloudinary.module';
+import { PaypalModule } from '../paypal/paypal.module';
 
 
 
@@ -46,6 +47,7 @@ import { CloudinaryModule } from '../cloudinary/cloudinary.module';
     AccountModule,
     OtpModule,
     CloudinaryModule,
+    PaypalModule
   ],
   controllers: [AppController],
   providers: [
