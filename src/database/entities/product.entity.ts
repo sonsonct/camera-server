@@ -1,6 +1,7 @@
 import { Entity, Column, ManyToOne, JoinColumn, Index, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 import { Category } from 'src/database/entities/category.entity';
 import { Comment } from 'src/database/entities/comment.entity';
+import { Order } from './order.entity';
 
 
 
@@ -43,4 +44,7 @@ export class Products {
 
     @OneToMany(() => Comment, (comments) => comments.products)
     comments: Comment[]
+
+    @OneToMany(() => Order, (orders) => orders.product)
+    orders: Order[]
 }
