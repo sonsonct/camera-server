@@ -1,6 +1,7 @@
 import { Entity, Column, OneToMany, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { RoleScope, UserStatus } from '../../commons/enums';
 import { Comment } from 'src/database/entities/comment.entity';
+import { Cart } from './cart.entity';
 
 
 @Entity()
@@ -34,4 +35,7 @@ export class User {
 
   @OneToMany(() => Comment, (comments) => comments.user)
   comments: Comment[]
+
+  @OneToMany(() => Cart, (carts) => carts.user)
+  carts: Cart[]
 }

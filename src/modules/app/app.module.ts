@@ -22,6 +22,7 @@ import { AccountModule } from '../account/account.module';
 import { ProductsModule } from '../products/products.module';
 import { CloudinaryModule } from '../cloudinary/cloudinary.module';
 import { PaypalModule } from '../paypal/paypal.module';
+import { CartModule } from '../cart/cart.module';
 
 
 
@@ -47,7 +48,8 @@ import { PaypalModule } from '../paypal/paypal.module';
     AccountModule,
     OtpModule,
     CloudinaryModule,
-    PaypalModule
+    PaypalModule,
+    CartModule
   ],
   controllers: [AppController],
   providers: [
