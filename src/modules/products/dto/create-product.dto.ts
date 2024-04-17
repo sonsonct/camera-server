@@ -18,6 +18,10 @@ export class CreateProductDto {
     @IsNotEmpty({ message: 'common.REQUIRED_FIELD' })
     count: number;
 
+    @ApiProperty({ type: "number" })
+    @IsNotEmpty({ message: 'common.REQUIRED_FIELD' })
+    price: number;
+
     @IsOptional()
     image: string;
 }

@@ -18,6 +18,7 @@ export class ProductsRepository extends TypeORMRepository<Products> {
 
         const queryBuilder = this.createQueryBuilder('products')
             .leftJoinAndSelect('products.category', 'category')
+            .where('category.deleted = :deleted', { deleted: false });
 
         if (searchKey) {
             queryBuilder.andWhere('MATCH(products.productName, products.content) AGAINST(:dataSearch IN NATURAL LANGUAGE MODE) or category.categoryName LIKE :categoryName', {

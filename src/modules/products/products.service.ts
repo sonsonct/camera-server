@@ -30,11 +30,11 @@ export class ProductsService {
     }
 
     async deleteProduct(id: number) {
-        return this.productsRepository.delete(id);
+        return this.productsRepository.update(id, { deleted: true });
     }
 
     async detailProduct(id: number) {
-        return await this.productsRepository.findOneBy({ id });
+        return await this.productsRepository.findOneBy({ id: id, deleted: true });
     }
 
     async listProduct(query: GetListProductDto) {

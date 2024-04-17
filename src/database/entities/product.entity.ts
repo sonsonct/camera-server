@@ -22,6 +22,9 @@ export class Products {
     @Column({ type: 'varchar', length: '500', nullable: false })
     public productName: string;
 
+    @Column({ type: 'bigint', nullable: false })
+    public price: number;
+
     @Column({ type: 'text', nullable: true })
     public image: string;
 
@@ -30,6 +33,9 @@ export class Products {
 
     @Column({ nullable: false, default: 0 })
     public count: number;
+
+    @Column({ nullable: false, default: false })
+    public deleted: boolean;
 
     @ManyToOne(() => Category, category => category.products, { onDelete: 'SET NULL' })
     @JoinColumn({ name: 'categoryId' })
