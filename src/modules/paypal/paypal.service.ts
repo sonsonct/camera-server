@@ -1,9 +1,12 @@
+import { CartRepository } from 'src/repositories/cart.repository';
 import { Injectable } from '@nestjs/common';
 import * as paypal from 'paypal-rest-sdk';
 
 @Injectable()
 export class PaypalService {
-    constructor() {
+    constructor(
+        private readonly cartRepository: CartRepository
+    ) {
         paypal.configure({
             mode: 'sandbox',
             client_id: process.env.PAYPAL_CLIENT_ID,
@@ -11,7 +14,10 @@ export class PaypalService {
         });
     }
 
-    async createPayment(amount: number) {
+    async createPayment(userId: number) {
+        const data = await this.cartRepository.getCart(userId);
+        //console.log(data[0].orders);
+
         const payment = {
             intent: 'sale',
             payer: {
@@ -23,24 +29,32 @@ export class PaypalService {
             },
             transactions: [
                 {
+
                     item_list: {
                         items: [
-                            {
-                                name: "camera ne",
-                                quantity: '1',
-                                price: amount.toFixed(2),
-                                currency: 'USD',
-                            },
-                        ],
+                        ]
                     },
                     amount: {
-                        total: amount.toFixed(2),
+                        total: 0,
                         currency: 'USD',
                     },
                     description: 'Purchase of ' + "camera ne",
                 },
             ],
         };
+
+        let sumPrice = 0;
+        data[0].orders.forEach((order) => {
+            const item = {
+                name: order.product.productName,
+                quantity: order.total,
+                price: (order.total * order.product.price),
+                currency: 'USD',
+            }
+            sumPrice += order.total * order.product.price
+            payment.transactions[0].item_list.items.push(item);
+        });
+        payment.transactions[0].amount.total = sumPrice;
 
         return new Promise((resolve, reject) => {
             paypal.payment.create(payment, function (error, payment) {

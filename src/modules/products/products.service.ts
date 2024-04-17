@@ -14,6 +14,7 @@ export class ProductsService {
     async createProduct(createProductDto: CreateProductDto, image: Express.Multer.File) {
         const media = await this.cloudinaryService.uploadFile(image);
         createProductDto.image = media['url']
+
         return this.productsRepository.insert(createProductDto);
     }
 

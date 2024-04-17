@@ -1,13 +1,15 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { PaypalService } from './paypal.service';
 
 @Controller('paypal')
 export class PaypalController {
     constructor(private readonly paypalService: PaypalService) { }
 
-    @Get('payment')
-    async createPayment() {
-        const approvalUrl = await this.paypalService.createPayment(100);
+    @Get('payment/:id')
+    async createPayment(
+        @Param('id') id: number
+    ) {
+        const approvalUrl = await this.paypalService.createPayment(id);
         return { approvalUrl };
     }
 
