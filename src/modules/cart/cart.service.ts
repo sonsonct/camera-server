@@ -1,7 +1,6 @@
 import { CartRepository } from './../../repositories/cart.repository';
 import { Injectable } from '@nestjs/common';
 import { CreateCartDto } from './dto/create-card.dto';
-import { Cart } from 'src/database/entities/cart.entity';
 import { ProductsRepository } from 'src/repositories/products.repository';
 import { OrderRepository } from 'src/repositories/order.repository';
 
@@ -12,15 +11,31 @@ export class CartService {
         private readonly productsRepository: ProductsRepository,
         private readonly orderRepository: OrderRepository
     ) { }
-    async createCart(cart: CreateCartDto) {
-        const { userId, ...productsId } = cart;
-        const cartInsert = await this.cartRepository.insert(cart);
+    async createCart(createCartDto: CreateCartDto) {
+        const { userId, ...productsId } = createCartDto;
+        const cart = await this.cartRepository.findOneBy({ userId: userId })
+
+        let cartId;
+        if (!cart) {
+            const cartInsert = await this.cartRepository.insert(createCartDto);
+            cartId = cartInsert.identifiers[0].id
+
+        } else {
+            cartId = cart.id
+
+        }
 
         productsId.productId.forEach(async (productId) => {
-            await this.orderRepository.insert({ productId: productId, cartId: cartInsert.identifiers[0].id })
+            const existProduct = await this.orderRepository.findOneBy({ cartId: cartId, productId: productId });
+
+            if (!existProduct) {
+                await this.orderRepository.insert({ cartId: cartId, productId: productId });
+            } else {
+                await this.orderRepository.update({ cartId: cartId, productId: productId }, { total: existProduct.total + 1 });
+            }
         })
 
-        return cartInsert;
+        return true;
     }
 
     async selectCart(userId: number) {
