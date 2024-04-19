@@ -29,7 +29,6 @@ export class PaypalService {
             },
             transactions: [
                 {
-
                     item_list: {
                         items: [
                         ]

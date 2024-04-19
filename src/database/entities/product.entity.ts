@@ -35,6 +35,9 @@ export class Products {
     @Column({ nullable: false, default: 0 })
     public count: number;
 
+    @Column({ type: 'text', nullable: true })
+    public description: string;
+
     @Column({ nullable: false, default: false })
     public deleted: boolean;
 
