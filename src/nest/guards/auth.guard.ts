@@ -15,7 +15,7 @@ import { LanguageInterceptor } from '../interceptors/language.interceptor';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor() { }
+  constructor() {}
 
   async canActivate(context: ExecutionContext) {
     try {
@@ -28,7 +28,7 @@ export class AuthGuard implements CanActivate {
       }
 
       const decoded = BasicAuth.verifyToken(token);
-
+      console.log(decoded);
       if (!decoded || !checkTokenPayload(decoded)) {
         throw new UnauthorizedError({ message: 'common.TOKEN_INVALID' });
       }

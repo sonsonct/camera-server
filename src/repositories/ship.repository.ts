@@ -1,16 +1,17 @@
 import { CustomRepository } from 'src/modules/commons/typeorm-ex/typeorm-ex.decorator';
 import { TypeORMRepository } from '../database/typeorm.repository';
-import { Cart } from 'src/database/entities/cart.entity';
+import { Ship } from 'src/database/entities/ship.entity';
 
-@CustomRepository(Cart)
-export class CartRepository extends TypeORMRepository<Cart> {
-  async getCart(userId: number) {
-    const queryBuilder = this.createQueryBuilder('cart')
+@CustomRepository(Ship)
+export class ShipRepository extends TypeORMRepository<Ship> {
+  async getShip(userId: number) {
+    const queryBuilder = this.createQueryBuilder('ship')
+      .leftJoinAndSelect('ship.cart', 'cart')
       .leftJoinAndSelect('cart.user', 'user')
       .leftJoinAndSelect('cart.orders', 'orders')
       .leftJoinAndSelect('orders.product', 'product')
       .where('cart.userId =:userId', { userId: userId })
-      .andWhere('cart.status = 0')
+      .andWhere('ship.status= false')
       .getMany();
 
     return queryBuilder;

@@ -3,46 +3,82 @@ import { Injectable } from '@nestjs/common';
 import { CreateCartDto } from './dto/create-card.dto';
 import { ProductsRepository } from 'src/repositories/products.repository';
 import { OrderRepository } from 'src/repositories/order.repository';
+import { ShipRepository } from 'src/repositories/ship.repository';
+import { CreateShipDto } from './dto/ship.dto';
 
 @Injectable()
 export class CartService {
-    constructor(
-        private readonly cartRepository: CartRepository,
-        private readonly productsRepository: ProductsRepository,
-        private readonly orderRepository: OrderRepository
-    ) { }
-    async createCart(createCartDto: CreateCartDto) {
-        const { userId, ...productsId } = createCartDto;
-        const cart = await this.cartRepository.findOneBy({ userId: userId })
+  constructor(
+    private readonly cartRepository: CartRepository,
+    private readonly productsRepository: ProductsRepository,
+    private readonly orderRepository: OrderRepository,
+    private readonly shipRepository: ShipRepository,
+  ) {}
 
-        let cartId;
-        if (!cart) {
-            const cartInsert = await this.cartRepository.insert(createCartDto);
-            cartId = cartInsert.identifiers[0].id
+  async createShip(createShipDto: CreateShipDto) {
+    return await this.shipRepository.insert(createShipDto);
+  }
 
-        } else {
-            cartId = cart.id
+  async getShip(userId: number) {
+    return await this.shipRepository.getShip(userId);
+  }
 
-        }
+  async updateShip(id: number) {
+    const ship = await this.shipRepository.findOneBy({ id });
 
-        productsId.productId.forEach(async (productId) => {
-            const existProduct = await this.orderRepository.findOneBy({ cartId: cartId, productId: productId });
+    await this.cartRepository.update({ id: ship.cartId }, { status: 1 });
+    return await this.shipRepository.update({ id }, { status: true });
+  }
 
-            if (!existProduct) {
-                await this.orderRepository.insert({ cartId: cartId, productId: productId });
-            } else {
-                await this.orderRepository.update({ cartId: cartId, productId: productId }, { total: existProduct.total + 1 });
-            }
-        })
-
-        return true;
+  async createCart(createCartDto: CreateCartDto) {
+    const { userId, ...productsId } = createCartDto;
+    const cart = await this.cartRepository.findOneBy({ userId: userId, status: 0 });
+    console.log(cart);
+    let cartId;
+    if (!cart) {
+      const cartInsert = await this.cartRepository.insert(createCartDto);
+      cartId = cartInsert.identifiers[0].id;
+    } else {
+      cartId = cart.id;
     }
 
-    async selectCart(userId: number) {
-        return await this.cartRepository.getCart(userId);
-    }
+    productsId.productId.forEach(async (productId) => {
+      const existProduct = await this.orderRepository.findOneBy({
+        cartId: cartId,
+        productId: productId,
+      });
 
-    async deleteCart(id: number) {
-        return await this.orderRepository.delete({ id });
+      if (!existProduct) {
+        await this.orderRepository.insert({ cartId: cartId, productId: productId });
+      } else {
+        await this.orderRepository.update(
+          { cartId: cartId, productId: productId },
+          { total: existProduct.total + 1 },
+        );
+      }
+    });
+
+    return true;
+  }
+
+  async selectCart(userId: number) {
+    return await this.cartRepository.getCart(userId);
+  }
+
+  async selectOrderCart(id: number) {
+    return await this.orderRepository.findOneBy({ id });
+  }
+
+  async updateOrderCart(id: number, body: any) {
+    const order = await this.orderRepository.findOneBy({ id });
+    //console.log(body);
+    if (order.total + body.total == 0) {
+      return await this.orderRepository.delete({ id });
     }
+    return await this.orderRepository.update({ id }, { total: order.total + body.total });
+  }
+
+  async deleteCart(id: number) {
+    return await this.orderRepository.delete({ id });
+  }
 }

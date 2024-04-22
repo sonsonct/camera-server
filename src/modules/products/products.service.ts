@@ -6,39 +6,45 @@ import { GetListProductDto } from './dto/get-list-product.dto';
 
 @Injectable()
 export class ProductsService {
-    constructor(
-        private readonly productsRepository: ProductsRepository,
-        private readonly cloudinaryService: CloudinaryService
-    ) { }
+  constructor(
+    private readonly productsRepository: ProductsRepository,
+    private readonly cloudinaryService: CloudinaryService,
+  ) {}
 
-    async createProduct(createProductDto: CreateProductDto, image: Express.Multer.File) {
-        const media = await this.cloudinaryService.uploadFile(image);
-        createProductDto.image = media['url']
+  async createProduct(createProductDto: CreateProductDto, image: Express.Multer.File) {
+    const media = await this.cloudinaryService.uploadFile(image);
+    createProductDto.image = media['url'];
 
-        return this.productsRepository.insert(createProductDto);
+    return this.productsRepository.insert(createProductDto);
+  }
+
+  async updateProduct(updateProductDto: CreateProductDto, image: Express.Multer.File, id: number) {
+    const product = await this.productsRepository.findOneBy({ id });
+    updateProductDto.image = product.image;
+
+    if (image) {
+      const media = await this.cloudinaryService.uploadFile(image);
+      updateProductDto.image = media['url'];
     }
 
-    async updateProduct(updateProductDto: CreateProductDto, image: Express.Multer.File, id: number) {
-        const product = await this.productsRepository.findOneBy({ id });
-        updateProductDto.image = product.image;
+    return this.productsRepository.update(id, updateProductDto);
+  }
 
-        if (image) {
-            const media = await this.cloudinaryService.uploadFile(image);
-            updateProductDto.image = media['url']
-        }
+  async updateSaleProduct(updateProductDto: any, id: number) {
+    const product = await this.productsRepository.findOneBy({ id });
 
-        return this.productsRepository.update(id, updateProductDto);
-    }
+    return this.productsRepository.update(id, { sale: updateProductDto.sale });
+  }
 
-    async deleteProduct(id: number) {
-        return this.productsRepository.update(id, { deleted: true });
-    }
+  async deleteProduct(id: number) {
+    return this.productsRepository.update(id, { deleted: true });
+  }
 
-    async detailProduct(id: number) {
-        return await this.productsRepository.findOneBy({ id: id, deleted: false });
-    }
+  async detailProduct(id: number) {
+    return await this.productsRepository.findOneBy({ id: id, deleted: false });
+  }
 
-    async listProduct(query: GetListProductDto) {
-        return await this.productsRepository.getListProduct(query);;
-    }
+  async listProduct(query: GetListProductDto) {
+    return await this.productsRepository.getListProduct(query);
+  }
 }

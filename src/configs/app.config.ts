@@ -1,6 +1,8 @@
 import { join } from 'path';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { AppConst } from '../commons/consts/app.const';
+import { config as dotenvConfig } from 'dotenv';
+dotenvConfig({ path: '.env' });
 
 class AppConfig {
   get appName(): string {
@@ -34,7 +36,6 @@ class AppConfig {
       defaultOTP: process.env.DEFAULT_OTP,
     };
   }
-
 
   get encryptKey() {
     return {
@@ -85,7 +86,6 @@ class AppConfig {
       pass: process.env.MAIL_PASSWORD,
     };
   }
-
 }
 
 export const appConfig = new AppConfig();

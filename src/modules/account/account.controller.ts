@@ -1,4 +1,14 @@
-import { Body, Controller, FileTypeValidator, Get, MaxFileSizeValidator, ParseFilePipe, Put, UploadedFile, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  FileTypeValidator,
+  Get,
+  MaxFileSizeValidator,
+  ParseFilePipe,
+  Put,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { AccountService } from './account.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApplyAuthGuard } from 'src/nest/guards/auth.guard';
@@ -12,47 +22,46 @@ import { FileInterceptor } from '@nestjs/platform-express';
 @ApplyAuthGuard()
 @Controller('account')
 export class AccountController {
+  constructor(private readonly accountService: AccountService) {}
 
-    constructor(
-        private readonly accountService: AccountService,
-    ) { }
+  @ApiOperation({ summary: 'My account' })
+  @Get('myAccount')
+  async getMyAccount(@GetTokenDecorator() user: TokenPayloadModel) {
+    return await this.accountService.getMyAccount(user.id);
+  }
 
-    @ApiOperation({ summary: 'My account' })
-    @Get('myAccount')
-    async getMyAccount(@GetTokenDecorator() user: TokenPayloadModel) {
-        return await this.accountService.getMyAccount(user.id);
-    }
+  @ApiOperation({ summary: 'Edit password' })
+  @Put('update-password')
+  async changePassword(
+    @Body() body: UpdateUserPasswordDto,
+    @GetTokenDecorator() user: TokenPayloadModel,
+  ) {
+    return await this.accountService.updatePassword(user.id, body);
+  }
 
-    @ApiOperation({ summary: 'Edit password' })
-    @Put('update-password')
-    async changePassword(
-        @Body() body: UpdateUserPasswordDto,
-        @GetTokenDecorator() user: TokenPayloadModel
-    ) {
-        return await this.accountService.updatePassword(user.id, body);
-    }
+  @ApiOperation({ summary: 'Edit username' })
+  @Put('update-username')
+  async changeUsername(@Body() body: UpdateNameDto, @GetTokenDecorator() user: TokenPayloadModel) {
+    console.log(body);
+    return await this.accountService.updateUserName(user.id, body);
+  }
 
-    @ApiOperation({ summary: 'Edit username' })
-    @Put('update-username')
-    async changeUsername(
-        @Body() body: UpdateNameDto,
-        @GetTokenDecorator() user: TokenPayloadModel
-    ) {
-        return await this.accountService.updateUserName(user.id, body);
-    }
-
-    @ApiOperation({ summary: 'Edit avatar' })
-    @UseInterceptors(FileInterceptor('avatar'))
-    @Put('update-avatar')
-    async changeAvatar(
-        @UploadedFile(new ParseFilePipe({
-            validators: [
-                new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 10 }),
-                new FileTypeValidator({ fileType: '.(png|jpeg|jpg|mp4)' }),
-            ],
-        })) avatar: Express.Multer.File,
-        @GetTokenDecorator() user: TokenPayloadModel,
-    ) {
-        return await this.accountService.updateAvatar(user.id, avatar);
-    }
+  @ApiOperation({ summary: 'Edit avatar' })
+  @UseInterceptors(FileInterceptor('avatar'))
+  @Put('update-avatar')
+  async changeAvatar(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 10 }),
+          new FileTypeValidator({ fileType: '.(png|jpeg|jpg|mp4)' }),
+        ],
+      }),
+    )
+    avatar: Express.Multer.File,
+    @GetTokenDecorator() user: TokenPayloadModel,
+  ) {
+    console.log(user);
+    return await this.accountService.updateAvatar(user.id, avatar);
+  }
 }

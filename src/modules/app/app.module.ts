@@ -12,8 +12,8 @@ import typeorm from 'src/configs/typeorm';
 import { CommentModule } from '../comment/comment.module';
 import { DatabaseModule } from 'src/database';
 import { StatisticalModule } from '../statistical/statistical.module';
-import { IpBlockMiddleware } from 'src/nest/middleware/ip-block.middleware';
-import { IpBlockRepository } from 'src/repositories/ipblock.repository';
+// import { IpBlockMiddleware } from 'src/nest/middleware/ip-block.middleware';
+// import { IpBlockRepository } from 'src/repositories/ipblock.repository';
 import { HttpExceptionFilter } from 'src/nest/filters/http-exception.filter';
 import { MailsModule } from '../mails/mails.module';
 import { ResponseInterceptor } from 'src/nest/interceptors/response.Interceptor';
@@ -24,19 +24,17 @@ import { CloudinaryModule } from '../cloudinary/cloudinary.module';
 import { PaypalModule } from '../paypal/paypal.module';
 import { CartModule } from '../cart/cart.module';
 
-
-
 @Module({
   imports: [
-    TypeOrmExModule.forCustomRepository([IpBlockRepository]),
+    //TypeOrmExModule.forCustomRepository([IpBlockRepository]),
     MailsModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [typeorm]
+      load: [typeorm],
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => (configService.get('typeorm'))
+      useFactory: async (configService: ConfigService) => configService.get('typeorm'),
     }),
     DatabaseModule,
     I18nConfigModule,
@@ -49,7 +47,7 @@ import { CartModule } from '../cart/cart.module';
     OtpModule,
     CloudinaryModule,
     PaypalModule,
-    CartModule
+    CartModule,
   ],
   controllers: [AppController],
   providers: [
@@ -63,12 +61,9 @@ import { CartModule } from '../cart/cart.module';
       useClass: ResponseInterceptor,
     },
   ],
-
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(IpBlockMiddleware)
-      .forRoutes({ path: '*', method: RequestMethod.ALL });
+    //consumer.apply(IpBlockMiddleware).forRoutes({ path: '*', method: RequestMethod.ALL });
   }
 }
