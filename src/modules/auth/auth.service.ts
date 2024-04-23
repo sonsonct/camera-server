@@ -31,7 +31,7 @@ export class AuthService {
     //private readonly ipBlockRepository: IpBlockRepository,
     private readonly httpService: HttpService,
     private readonly otpService: OtpService,
-  ) {}
+  ) { }
 
   async deleteUser(body: SendOtpToMailDto) {
     return await this.userRepository.delete({ email: body.email });
@@ -365,7 +365,7 @@ export class AuthService {
     try {
       const { data } = await firstValueFrom(
         this.httpService.get(
-          `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${userData.userData['accessToken']}`,
+          `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${userData.userData['dataUser'].accessToken}`,
         ),
       );
       return data.user_id;

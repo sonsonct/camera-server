@@ -25,7 +25,7 @@ import { SendOtpModel, VerifyOtpModel } from 'src/modules/otp/otp.interface';
 @ApiTags('Auth-User')
 @Controller('user/auth')
 export class UserAuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @ApiResponse({
     description: 'Register success',
@@ -72,7 +72,7 @@ export class UserAuthController {
 
   @Get('facebook')
   @UseGuards(AuthGuard('facebook'))
-  async facebookLogin() {}
+  async facebookLogin() { }
 
   @Get('facebook/redirect')
   @UseGuards(AuthGuard('facebook'))
@@ -99,9 +99,25 @@ export class UserAuthController {
     return await this.authService.loginSocial(loginSocialDto);
   }
 
+  @ApiResponse({
+    description: 'gg log in',
+    status: HttpStatus.OK,
+  })
+  @ApiOperation({ summary: 'gg log in' })
+  //@ApiBody({ type: SendOtpToMailDto }
+  @Post('google')
+  async googleLog(@Body() body: any) {
+    const loginSocialDto = new LoginSocialDto();
+    loginSocialDto.userData = body;
+    loginSocialDto.socialName = SocialLoginName.GOOGLE;
+    loginSocialDto.email = body.dataUser.email;
+
+    return await this.authService.loginSocial(loginSocialDto);
+  }
+
   @Get('google')
   @UseGuards(AuthGuard('google'))
-  async googleAuth() {}
+  async googleAuth() { }
 
   @Get('google/redirect')
   @UseGuards(AuthGuard('google'))
