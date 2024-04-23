@@ -23,6 +23,7 @@ import { ProductsModule } from '../products/products.module';
 import { CloudinaryModule } from '../cloudinary/cloudinary.module';
 import { PaypalModule } from '../paypal/paypal.module';
 import { CartModule } from '../cart/cart.module';
+import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { CartModule } from '../cart/cart.module';
     CloudinaryModule,
     PaypalModule,
     CartModule,
+    UserModule
   ],
   controllers: [AppController],
   providers: [

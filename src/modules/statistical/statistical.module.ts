@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { StatisticalController } from './statistical.controller';
 import { StatisticalService } from './statistical.service';
 import { TypeOrmExModule } from '../commons/typeorm-ex/typeorm-ex.module';
-import { StatisticalRepository } from 'src/repositories/statistical.repository';
+import { CartRepository } from 'src/repositories/cart.repository';
 
 @Module({
-  imports: [TypeOrmExModule.forCustomRepository([StatisticalRepository])],
+  imports: [TypeOrmExModule.forCustomRepository([CartRepository])],
   controllers: [StatisticalController],
   providers: [StatisticalService]
 })

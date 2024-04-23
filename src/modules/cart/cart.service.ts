@@ -5,6 +5,7 @@ import { ProductsRepository } from 'src/repositories/products.repository';
 import { OrderRepository } from 'src/repositories/order.repository';
 import { ShipRepository } from 'src/repositories/ship.repository';
 import { CreateShipDto } from './dto/ship.dto';
+import { GetListCart } from './dto/list-cart.dto';
 
 @Injectable()
 export class CartService {
@@ -13,7 +14,7 @@ export class CartService {
     private readonly productsRepository: ProductsRepository,
     private readonly orderRepository: OrderRepository,
     private readonly shipRepository: ShipRepository,
-  ) {}
+  ) { }
 
   async createShip(createShipDto: CreateShipDto) {
     return await this.shipRepository.insert(createShipDto);
@@ -65,9 +66,14 @@ export class CartService {
     return await this.cartRepository.getCart(userId);
   }
 
+  async getAllCart(query: GetListCart) {
+    return await this.cartRepository.getAllCart(query);
+  }
+
   async selectOrderCart(id: number) {
     return await this.orderRepository.findOneBy({ id });
   }
+
 
   async updateOrderCart(id: number, body: any) {
     const order = await this.orderRepository.findOneBy({ id });
@@ -76,6 +82,10 @@ export class CartService {
       return await this.orderRepository.delete({ id });
     }
     return await this.orderRepository.update({ id }, { total: order.total + body.total });
+  }
+
+  async confirmOrderCart(id: number) {
+    return await this.cartRepository.update({ id }, { status: 2 });
   }
 
   async deleteCart(id: number) {

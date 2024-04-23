@@ -1,4 +1,4 @@
-import { StatisticalRepository } from './../../repositories/statistical.repository';
+import { CartRepository } from 'src/repositories/cart.repository';
 import { Injectable } from '@nestjs/common';
 import { StatisticalDto } from './dto/statistical.dto';
 
@@ -6,15 +6,14 @@ import { StatisticalDto } from './dto/statistical.dto';
 @Injectable()
 export class StatisticalService {
     constructor(
-        private readonly statisticalRepository: StatisticalRepository,
-
+        public readonly cartRepository: CartRepository
     ) { }
 
     async getStatistical(query: StatisticalDto) {
-        return await this.statisticalRepository.getStatistical(query);
+        //return await this.statisticalRepository.getStatistical(query);
     }
 
     async getStatisticalFullMonth() {
-        return await this.statisticalRepository.getStatisticalFullMonth();
+        //return await this.statisticalRepository.getStatisticalFullMonth();
     }
 }

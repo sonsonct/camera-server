@@ -8,7 +8,6 @@ import { httpBadRequest, httpNotFound } from 'src/nest/exceptions/http-exception
 import { RoleScope, StatisticalType } from 'src/commons/enums';
 import { UserRepository } from '../../repositories/user.repository';
 import { Comment } from 'src/database/entities/comment.entity';
-import { StatisticalRepository } from 'src/repositories/statistical.repository';
 
 
 @Injectable()
@@ -16,7 +15,6 @@ export class CommentService {
     constructor(
         private readonly commentRepository: CommentRepository,
         private readonly userRepository: UserRepository,
-        private readonly statisticalRepository: StatisticalRepository,
         private readonly productsRepository: ProductsRepository,
     ) { }
 
@@ -49,7 +47,6 @@ export class CommentService {
             throw new httpBadRequest("YOU_NOT_AUTHOR_COMMENT");
         }
 
-        await this.statisticalRepository.addStatistical(StatisticalType.DELETE_COMMENT);
 
         const commentDelete = await this.commentRepository.update(id, { deleted: true });
 
