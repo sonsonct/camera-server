@@ -25,6 +25,18 @@ export class CategoryPublicController {
     }
 
     @ApiResponse({
+        description: 'Get count prd in category  success',
+        status: HttpStatus.OK,
+    })
+    @ApiOperation({ summary: 'Get count prd in category' })
+    @Get('/count')
+    @HttpCode(HttpStatus.OK)
+    async getProductInCategory(
+    ) {
+        return await this.categoryService.getCountProductCategory();
+    }
+
+    @ApiResponse({
         description: 'Get all category  success',
         status: HttpStatus.OK,
     })

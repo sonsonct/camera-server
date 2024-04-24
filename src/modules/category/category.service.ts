@@ -67,6 +67,10 @@ export class CategoryService {
         return await this.categoryRepository.getAllCategory();
     }
 
+    async getCountProductCategory() {
+        return await this.categoryRepository.getCountProductCategory();
+    }
+
     async getCategoryByParentId(parentId: number) {
         await this.checkExitsCategory(parentId);
 

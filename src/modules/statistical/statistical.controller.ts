@@ -17,8 +17,8 @@ export class StatisticalController {
         status: HttpStatus.OK,
     })
     @ApiOperation({ summary: 'Get statistical' })
-    @ApplyAuthGuard()
-    @SetRoles(RoleScope.ADMIN)
+    // @ApplyAuthGuard()
+    // @SetRoles(RoleScope.ADMIN)
     @Get('')
     @HttpCode(HttpStatus.OK)
     async getStatistical(
@@ -32,8 +32,8 @@ export class StatisticalController {
         status: HttpStatus.OK,
     })
     @ApiOperation({ summary: 'Get statistical full month' })
-    @ApplyAuthGuard()
-    @SetRoles(RoleScope.ADMIN)
+    // @ApplyAuthGuard()
+    // @SetRoles(RoleScope.ADMIN)
     @Get('/month')
     @HttpCode(HttpStatus.OK)
     async getStatisticalFullMonth(

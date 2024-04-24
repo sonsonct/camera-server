@@ -62,4 +62,12 @@ export class CategoryRepository extends TypeORMRepository<Category> {
       .select(['category.id', 'category.categoryName'])
       .getMany();
   }
+
+  async getCountProductCategory() {
+    return this.createQueryBuilder('category')
+      .leftJoin('category.products', 'products')
+      .select(['category.categoryName as categoryName', 'count(products.id) as count'])
+      .groupBy('category.id')
+      .getRawMany();
+  }
 }

@@ -10,10 +10,10 @@ export class StatisticalService {
     ) { }
 
     async getStatistical(query: StatisticalDto) {
-        //return await this.statisticalRepository.getStatistical(query);
+        return await this.cartRepository.getStatistical(query);
     }
 
     async getStatisticalFullMonth() {
-        //return await this.statisticalRepository.getStatisticalFullMonth();
+        return await this.cartRepository.getStatisticalFullMonth();
     }
 }
