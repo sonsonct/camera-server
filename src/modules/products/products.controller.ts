@@ -21,7 +21,7 @@ import { GetListProductDto } from './dto/get-list-product.dto';
 @ApiTags('product')
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(private readonly productsService: ProductsService) { }
 
   @ApiResponse({
     description: 'Create product success',
@@ -33,8 +33,6 @@ export class ProductsController {
   @Post('')
   @HttpCode(HttpStatus.OK)
   async createProduct(@Body() body: CreateProductDto, @UploadedFile() image: Express.Multer.File) {
-    console.log(body);
-    console.log(image);
     return await this.productsService.createProduct(body, image);
   }
 
@@ -52,8 +50,19 @@ export class ProductsController {
     @Body() body: CreateProductDto,
     @UploadedFile() image: Express.Multer.File,
   ) {
-    console.log(body);
+
     return await this.productsService.updateProduct(body, image, id);
+  }
+
+  @ApiResponse({
+    description: 'list product success',
+    status: HttpStatus.OK,
+  })
+  @ApiOperation({ summary: 'list product' })
+  @Get('/hot')
+  @HttpCode(HttpStatus.OK)
+  async getListProductHot(@Query() query: GetListProductDto) {
+    return await this.productsService.listProductHot(query);
   }
 
   @ApiResponse({

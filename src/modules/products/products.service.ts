@@ -9,7 +9,7 @@ export class ProductsService {
   constructor(
     private readonly productsRepository: ProductsRepository,
     private readonly cloudinaryService: CloudinaryService,
-  ) {}
+  ) { }
 
   async createProduct(createProductDto: CreateProductDto, image: Express.Multer.File) {
     const media = await this.cloudinaryService.uploadFile(image);
@@ -46,5 +46,9 @@ export class ProductsService {
 
   async listProduct(query: GetListProductDto) {
     return await this.productsRepository.getListProduct(query);
+  }
+
+  async listProductHot(query: GetListProductDto) {
+    return await this.productsRepository.getListProductHot(query);
   }
 }
