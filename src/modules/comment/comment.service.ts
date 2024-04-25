@@ -3,7 +3,7 @@ import { CommentUserLikesDto } from './dto/create-likes-comment.dto';
 import { CreateCommentDto, CreateReplyCommentDto } from './dto/create-comment.dto';
 import { CommentRepository } from '../../repositories/comment.repository';
 import { Injectable } from '@nestjs/common';
-import { ListCommentDto, ListSubCommentDto } from './dto/find-comment.dto';
+import { ListAllCommentDto, ListCommentDto, ListSubCommentDto } from './dto/find-comment.dto';
 import { httpBadRequest, httpNotFound } from 'src/nest/exceptions/http-exception';
 import { RoleScope, StatisticalType } from 'src/commons/enums';
 import { UserRepository } from '../../repositories/user.repository';
@@ -21,7 +21,7 @@ export class CommentService {
     async createComment(createCommentDto: CreateCommentDto, userId: number) {
         const product = await this.productsRepository.findOneBy({ id: createCommentDto.productId });
 
-        const commentInsert = await this.commentRepository.insert({ productId: createCommentDto.productId, userId: userId, content: createCommentDto.content });
+        const commentInsert = await this.commentRepository.insert({ productId: createCommentDto.productId, userId: userId, content: createCommentDto.content, rate: createCommentDto.rate });
 
         return await this.commentRepository.getCommentById(commentInsert.identifiers[0].id);
     }
@@ -35,7 +35,7 @@ export class CommentService {
         createReplyCommentDto.productId = comment.productId;
 
 
-        const repCommentInsert = await this.commentRepository.insert({ productId: createReplyCommentDto.productId, userId: userId, content: createReplyCommentDto.content, parentId: createReplyCommentDto.parentId });
+        const repCommentInsert = await this.commentRepository.insert({ productId: createReplyCommentDto.productId, userId: userId, content: createReplyCommentDto.content, parentId: createReplyCommentDto.parentId, rate: createReplyCommentDto.rate });
 
         return await this.commentRepository.getCommentById(repCommentInsert.identifiers[0].id);
     }
@@ -51,6 +51,10 @@ export class CommentService {
         const commentDelete = await this.commentRepository.update(id, { deleted: true });
 
         return commentDelete;
+    }
+    async getAllComment(query: ListAllCommentDto) {
+
+        return this.commentRepository.listAllComment(query);
     }
 
     async getListComment(query: ListCommentDto) {

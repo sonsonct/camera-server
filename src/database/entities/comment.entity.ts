@@ -23,6 +23,9 @@ export class Comment {
     @Column({ nullable: false })
     public userId: number;
 
+    @Column({ nullable: true })
+    public rate: number;
+
     @Column({ type: 'text', nullable: false })
     public content: string;
 

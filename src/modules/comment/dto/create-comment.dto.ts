@@ -10,6 +10,10 @@ export class CreateCommentDto {
     @ApiProperty({ type: 'string' })
     @IsNotEmpty({ message: 'common.REQUIRED_FIELD' })
     content: string;
+
+    @ApiProperty({ type: 'number' })
+    @IsOptional()
+    rate: number;
 }
 
 export class CreateReplyCommentDto extends CreateCommentDto {

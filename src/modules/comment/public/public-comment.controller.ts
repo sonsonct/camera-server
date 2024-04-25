@@ -1,7 +1,7 @@
 import { CommentService } from '../comment.service';
 import { Controller, Get, HttpCode, HttpStatus, Param, Query, } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { ListCommentDto, ListSubCommentDto } from '../dto/find-comment.dto';
+import { ListAllCommentDto, ListCommentDto, ListSubCommentDto } from '../dto/find-comment.dto';
 
 @ApiTags("comments-public")
 @Controller('public/comments')
@@ -9,6 +9,19 @@ export class CommentPublicController {
     constructor(
         private readonly commentService: CommentService
     ) { }
+
+    @ApiResponse({
+        description: 'Get list comment success',
+        status: HttpStatus.OK,
+    })
+    @ApiOperation({ summary: 'List comment' })
+    @Get('')
+    @HttpCode(HttpStatus.OK)
+    async getAllComment(
+        @Query() listCommentDto: ListAllCommentDto,
+    ) {
+        return await this.commentService.getAllComment(listCommentDto);
+    }
 
     @ApiResponse({
         description: 'Get list comment success',
